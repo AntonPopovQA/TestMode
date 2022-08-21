@@ -26,10 +26,10 @@ public class Generator {
     private Generator() {
     }
 
-    private static void sendRequest(String registeredUser) {
+    private static void sendRequest(Registration.RegistrationDto registeredUser) {
         given()
                 .spec(requestSpec)
-                .body(new Registration.RegistrationDto("vasya", "password", "active"))
+                .body(registeredUser)
                 .when()
                 .post("/api/system/users")
                 .then()
@@ -58,13 +58,7 @@ public class Generator {
         public static RegistrationDto getRegisteredUser(String status) {
             Gson gson = new Gson();
             RegistrationDto registeredUser = getUser(status);
-            given()
-                    .spec(requestSpec)
-                    .body(gson.toJson(registeredUser))
-                    .when()
-                    .post("/api/system/users")
-                    .then()
-                    .statusCode(200);
+            sendRequest(registeredUser);
             return registeredUser;
         }
 
